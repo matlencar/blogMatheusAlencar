@@ -14,6 +14,10 @@ import { environment } from 'src/environments/environment.prod';
 export class PostagemEditComponent implements OnInit {
 
   postagem: Postagem = new Postagem()
+
+  tema: Tema = new Tema()
+  listaTemas: Tema[]
+  idTema: number
   
 
   constructor(
@@ -42,7 +46,7 @@ export class PostagemEditComponent implements OnInit {
   }
 
   findByIdTema(){
-    this.temaService.GetByIdTema(this.IdTema).subscribe((resp: Tema)=> {
+    this.temaService.GetByIdTema(this.idTema).subscribe((resp: Tema)=> {
       this.tema = resp
     })
   }
@@ -54,7 +58,14 @@ export class PostagemEditComponent implements OnInit {
   }
 
   atualizar(){
+    this.tema.id = this.idTema
+    this.postagem.tema = this.tema
 
+    this.postagemService.putPostagem(this.postagem).subscribe((resp: Postagem) => {
+      this.postagem = resp
+      alert('Postagem atualizada com sucesso')
+      this.router.navigate(['/inicio'])
+    })
   }
 
 }
